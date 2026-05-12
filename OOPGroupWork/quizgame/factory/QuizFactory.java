@@ -44,8 +44,10 @@ public class QuizFactory {
             return createEasyQuestions();
         } else if (difficulty == DifficultyLevel.MEDIUM) {
             return createMediumQuestions();
-        } else {
+        } else if (difficulty == DifficultyLevel.HARD) {
             return createHardQuestions();
+        } else {
+            return createExtremelyHardQuestions();
         }
     }
 
@@ -132,12 +134,8 @@ public class QuizFactory {
 
         questions.add(new MultipleChoiceQuestion(
                 "Which pair is most commonly used for encapsulation?",
-                new String[]{
-                        "public fields and no methods",
-                        "private fields with getters and setters",
-                        "abstract fields",
-                        "interface fields"
-                }, 'B'));
+                new String[]{"public fields and no methods", "private fields with getters and setters",
+                        "abstract fields", "interface fields"}, 'B'));
 
         questions.add(new FillInBlankQuestion(
                 "Fill in the blank: A method that returns a private field value is often called a ________.",
@@ -179,7 +177,6 @@ public class QuizFactory {
                 "Which keyword declares an abstract method in Java?",
                 new String[]{"virtual", "abstract", "override", "final"}, 'B'));
 
-
         questions.add(new CodeCompletionQuestion(
                 "Complete the code:\n\npublic ________ class Shape {\n    public abstract double area();\n}",
                 "abstract"));
@@ -213,6 +210,82 @@ public class QuizFactory {
                 new String[]{"15", "55", "105", "Error"}, 'C'));
 
         addNumberSystemQuestions(questions);
+
+        return questions;
+    }
+
+    private List<Question> createExtremelyHardQuestions() {
+        List<Question> questions = new ArrayList<>();
+
+        questions.add(new FillInBlankQuestion(
+                "What is printed?\n\nclass A {\n    void show() { System.out.print(\"A\"); }\n}\nclass B extends A {\n    void show() { System.out.print(\"B\"); }\n}\nA obj = new B();\nobj.show();",
+                "B"));
+
+        questions.add(new MultipleChoiceQuestion(
+                "Which statement about dynamic dispatch in Java is correct?",
+                new String[]{
+                        "Method calls are always based on reference type",
+                        "Overridden method calls are based on the actual object type at runtime",
+                        "Static methods use dynamic dispatch",
+                        "Constructors are dynamically dispatched"
+                }, 'B'));
+
+        questions.add(new TrueFalseQuestion(
+                "Private methods are not overridden in Java.",
+                true));
+
+        questions.add(new FillInBlankQuestion(
+                "What is printed?\n\nString a = \"Java\";\nString b = new String(\"Java\");\nSystem.out.println(a == b);",
+                "false"));
+
+        questions.add(new MultipleChoiceQuestion(
+                "Which method should usually be overridden when equals() is overridden?",
+                new String[]{"toString()", "clone()", "hashCode()", "compareTo()"}, 'C'));
+
+        questions.add(new FillInBlankQuestion(
+                "What is printed?\n\nint x = 3;\nSystem.out.println(++x + x++);",
+                "8"));
+
+        questions.add(new CodeCompletionQuestion(
+                "Complete the missing keyword:\n\ntry {\n    int x = 10 / 0;\n} ________ (ArithmeticException e) {\n    System.out.println(\"Error\");\n}",
+                "catch"));
+
+        questions.add(new MultipleChoiceQuestion(
+                "Which collection prevents duplicate elements?",
+                new String[]{"List", "Set", "Queue", "ArrayList"}, 'B'));
+
+        questions.add(new FillInBlankQuestion(
+                "What is printed?\n\nint[] nums = {2, 4, 6};\nSystem.out.println(nums.length);",
+                "3"));
+
+        questions.add(new TrueFalseQuestion(
+                "A static method can be overridden using runtime polymorphism.",
+                false));
+
+        questions.add(new CodeCompletionQuestion(
+                "Complete the missing keyword:\n\npublic class Dog extends Animal {\n    @Override\n    public void speak() {\n        ________.speak();\n        System.out.println(\"Dog\");\n    }\n}",
+                "super"));
+
+        questions.add(new FillInBlankQuestion(
+                "Fill in the blank: The process of converting a superclass reference back to a subclass type is called ________.",
+                "downcasting"));
+
+        questions.add(new MultipleChoiceQuestion(
+                "Which exception is thrown when accessing an invalid array index?",
+                new String[]{
+                        "NullPointerException",
+                        "ArrayIndexOutOfBoundsException",
+                        "ClassCastException",
+                        "ArithmeticException"
+                }, 'B'));
+
+        questions.add(new FillInBlankQuestion(
+                "What is printed?\n\nint result = 2 + 3 * 4;\nSystem.out.println(result);",
+                "14"));
+
+        questions.add(new TrueFalseQuestion(
+                "An abstract class can have constructors.",
+                true));
 
         return questions;
     }
