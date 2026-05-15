@@ -1,4 +1,3 @@
-// CodeCompletionQuestion.java
 package OOPGroupWork.quizgame.questions;
 
 import OOPGroupWork.quizgame.model.DifficultyLevel;
