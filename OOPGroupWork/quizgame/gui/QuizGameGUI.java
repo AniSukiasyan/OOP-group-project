@@ -1,4 +1,3 @@
-// QuizGameGUI.java
 package OOPGroupWork.quizgame.gui;
 
 import java.awt.*;
