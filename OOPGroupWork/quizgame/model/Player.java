@@ -1,4 +1,3 @@
-// Player.java
 package OOPGroupWork.quizgame.model;
 
 import OOPGroupWork.quizgame.exceptions.InvalidPlayerNameException;
