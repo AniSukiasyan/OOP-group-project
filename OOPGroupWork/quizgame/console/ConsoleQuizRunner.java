@@ -1,28 +1,45 @@
-package OOPGroupProject.OOPGroupWork.quizgame.console;
+package OOPGroupWork.quizgame.console;
 
 import java.util.Scanner;
 
-import OOPGroupProject.OOPGroupWork.quizgame.engine.AnswerResult;
-import  OOPGroupProject.OOPGroupWork.quizgame.engine.QuizSession;
-import OOPGroupProject.OOPGroupWork.quizgame.exceptions.EmptyAnswerException;
-import OOPGroupProject.OOPGroupWork.quizgame.exceptions.InvalidDifficultyException;
-import OOPGroupProject.OOPGroupWork.quizgame.exceptions.InvalidPlayerNameException;
-import OOPGroupProject.OOPGroupWork.quizgame.factory.QuizFactory;
-import  OOPGroupProject.OOPGroupWork.quizgame.model.DifficultyLevel;
-import OOPGroupProject.OOPGroupWork.quizgame.model.Player;
-import OOPGroupProject.OOPGroupWork.quizgame.model.Quiz;
-import OOPGroupProject.OOPGroupWork.quizgame.questions.AnswerType;
-import OOPGroupProject.OOPGroupWork.quizgame.questions.Question;
-
+import OOPGroupWork.quizgame.engine.AnswerResult;
+import OOPGroupWork.quizgame.engine.QuizSession;
+import OOPGroupWork.quizgame.exceptions.EmptyAnswerException;
+import OOPGroupWork.quizgame.exceptions.InvalidDifficultyException;
+import OOPGroupWork.quizgame.exceptions.InvalidPlayerNameException;
+import OOPGroupWork.quizgame.factory.QuizFactory;
+import OOPGroupWork.quizgame.model.DifficultyLevel;
+import OOPGroupWork.quizgame.model.Player;
+import OOPGroupWork.quizgame.model.Quiz;
+import OOPGroupWork.quizgame.questions.AnswerType;
+import OOPGroupWork.quizgame.questions.Question;
+/**
+ * Runs the OOP Quiz Game in console mode
+ *
+ * This class handles user interaction through the command line, including
+ * reading the player's name, selecting a difficulty level, displaying
+ * questions, accepting answers, and showing the final score
+ */
 public class ConsoleQuizRunner {
     private final QuizFactory factory;
     private final Scanner scanner;
 
+    /**
+     * Creates a new console quiz runner.
+     *
+     * @param factory the quiz factory used to create quizzes
+     * @param scanner the scanner used to read user input from the console
+     */
     public ConsoleQuizRunner(QuizFactory factory, Scanner scanner) {
         this.factory = factory;
         this.scanner = scanner;
     }
 
+    /**
+     * Starts the quiz game in console mode.
+     * The method asks the player for their name, lets them choose a difficulty
+     * level, creates a quiz session, and begins the quiz.
+     */
     public void run() {
         System.out.println("GUI mode is not available in this environment.");
         System.out.println("Starting console mode instead.");
@@ -31,7 +48,8 @@ public class ConsoleQuizRunner {
 
         String name = scanner.nextLine().trim();
         if (name.isEmpty()) {
-            System.out.println(new InvalidPlayerNameException().getMessage() + " Using default name: Player.");
+            System.out.println(new InvalidPlayerNameException().getMessage()
+                    + " No name was entered, so the name has been assigned as \"Player\".");
             name = "Player";
         }
 
@@ -40,7 +58,13 @@ public class ConsoleQuizRunner {
         QuizSession session = new QuizSession(quiz, new Player(name));
         play(session);
     }
-
+    /**
+     * Displays the available difficulty levels and reads the player's choice.
+     * If the input is invalid, the Easy difficulty level is selected by default.
+     *
+     * @return the selected difficulty level, or {@code DifficultyLevel.EASY}
+     * if the user enters an invalid choice
+     */
     private DifficultyLevel chooseDifficulty() {
         DifficultyLevel[] difficulties = factory.getAvailableDifficulties();
 
@@ -66,6 +90,13 @@ public class ConsoleQuizRunner {
         }
     }
 
+    /**
+     * Runs the main quiz loop for the given quiz
+     * This method displays each question, reads the player's answer, submits it
+     * to the session, and prints whether the answer was correct or incorrect.
+     * When all questions are answered, it displays the final
+     * @param session the quiz session to play
+     */
     private void play(QuizSession session) {
         Quiz quiz = session.getQuiz();
 
@@ -102,6 +133,12 @@ public class ConsoleQuizRunner {
                 + session.getScoreSummary());
     }
 
+    /**
+     * Prints the question prompt and, if applicable, its answer choices.
+     * For multiple-choice questions, each choice is labeled with a letter
+     * starting from {@code A}.
+     * @param question the question to display
+     */
     private void printQuestion(Question question) {
         System.out.println(question.getPrompt());
 

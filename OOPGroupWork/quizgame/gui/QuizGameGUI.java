@@ -1,53 +1,30 @@
-package OOPGroupProject.OOPGroupWork.quizgame.gui;
+// QuizGameGUI.java
+package OOPGroupWork.quizgame.gui;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridLayout;
-import java.awt.HeadlessException;
-import java.awt.Insets;
-import java.awt.RenderingHints;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
 import javax.swing.border.LineBorder;
-
-import OOPGroupProject.OOPGroupWork.quizgame.engine.AnswerResult;
-import OOPGroupProject.OOPGroupWork.quizgame.engine.QuizSession;
-import OOPGroupProject.OOPGroupWork.quizgame.exceptions.EmptyAnswerException;
-import OOPGroupProject.OOPGroupWork.quizgame.exceptions.InvalidPlayerNameException;
-import OOPGroupProject.OOPGroupWork.quizgame.exceptions.QuizFinishedException;
-import OOPGroupProject.OOPGroupWork.quizgame.factory.QuizFactory;
-import OOPGroupProject.OOPGroupWork.quizgame.model.DifficultyLevel;
-import OOPGroupProject.OOPGroupWork.quizgame.model.Player;
-import OOPGroupProject.OOPGroupWork.quizgame.model.Quiz;
-import OOPGroupProject.OOPGroupWork.quizgame.questions.AnswerType;
-import OOPGroupProject.OOPGroupWork.quizgame.questions.Question;
-
+import OOPGroupWork.quizgame.engine.AnswerResult;
+import OOPGroupWork.quizgame.engine.QuizSession;
+import OOPGroupWork.quizgame.exceptions.EmptyAnswerException;
+import OOPGroupWork.quizgame.exceptions.InvalidPlayerNameException;
+import OOPGroupWork.quizgame.exceptions.QuizFinishedException;
+import OOPGroupWork.quizgame.factory.QuizFactory;
+import OOPGroupWork.quizgame.model.DifficultyLevel;
+import OOPGroupWork.quizgame.model.Player;
+import OOPGroupWork.quizgame.model.Quiz;
+import OOPGroupWork.quizgame.questions.AnswerType;
+import OOPGroupWork.quizgame.questions.Question;
+/**
+ * Main graphical user interface for the OOP Quiz Game.
+ * <p>
+ * This class builds and controls the Swing-based quiz window. It manages
+ * the welcome screen, quiz screen, answer input, progress display, score
+ * updates, and final result dialog.
+ * </p>
+ */
 public class QuizGameGUI extends JFrame {
     private static final Color BACKGROUND_TOP = new Color(28, 43, 91);
     private static final Color BACKGROUND_BOTTOM = new Color(16, 126, 137);
@@ -74,6 +51,11 @@ public class QuizGameGUI extends JFrame {
     private JTextField blankField;
     private ButtonGroup optionGroup;
 
+    /**
+     * Creates the quiz game GUI and initializes all interface components.
+     *
+     * @param factory the quiz factory used to create quizzes
+     */
     public QuizGameGUI(QuizFactory factory) {
         this.factory = factory;
 
@@ -167,6 +149,12 @@ public class QuizGameGUI extends JFrame {
         add(cardPanel);
     }
 
+    /**
+     * Creates the welcome screen where the player enters their name
+     * and selects a difficulty level.
+     *
+     * @return the welcome panel
+     */
     private JPanel createWelcomePanel() {
         JPanel panel = createSurfacePanel(new BorderLayout(18, 18));
         panel.setBorder(BorderFactory.createCompoundBorder(
@@ -220,12 +208,20 @@ public class QuizGameGUI extends JFrame {
         panel.add(lowerPanel, BorderLayout.SOUTH);
         return panel;
     }
-
+    /**
+     * Starts a new quiz using the provided player name and difficulty.
+     * <p>
+     * If the player name is empty, a default name is used.
+     * </p>
+     *
+     * @param name the player's entered name
+     * @param difficulty the selected difficulty level
+     */
     private void startQuiz(String name, DifficultyLevel difficulty) {
         String finalName = name.trim();
         if (finalName.isEmpty()) {
             JOptionPane.showMessageDialog(this, new InvalidPlayerNameException().getMessage()
-                    + "\nUsing default name: Player.");
+                    + "\nNo name was entered, so the name has been assigned as \"Player\".");
             finalName = "Player";
         }
 
@@ -240,6 +236,12 @@ public class QuizGameGUI extends JFrame {
         loadQuestion();
     }
 
+    /**
+     * Loads and displays the current question.
+     * <p>
+     * If the quiz is finished, the final result dialog is shown.
+     * </p>
+     */
     private void loadQuestion() {
         if (session.isFinished()) {
             showFinalResult();
@@ -268,6 +270,11 @@ public class QuizGameGUI extends JFrame {
         dynamicAnswerPanel.repaint();
     }
 
+    /**
+     * Displays answer choices for a multiple-choice or true/false question.
+     *
+     * @param question the question whose choices should be displayed
+     */
     private void loadChoiceQuestion(Question question) {
         String[] choices = question.getChoices();
         optionGroup = new ButtonGroup();
@@ -285,6 +292,9 @@ public class QuizGameGUI extends JFrame {
         }
     }
 
+    /**
+     * Displays a text field for fill-in-the-blank or code-completion questions.
+     */
     private void loadFillInBlankQuestion() {
         blankField = new JTextField();
         blankField.setColumns(25);
@@ -293,6 +303,13 @@ public class QuizGameGUI extends JFrame {
         dynamicAnswerPanel.add(blankField);
     }
 
+    /**
+     * Collects and submits the current answer.
+     * <p>
+     * The method displays feedback, updates the score and progress bar,
+     * and then loads the next question.
+     * </p>
+     */
     private void submitCurrentAnswer() {
         AnswerResult result;
         try {
@@ -315,6 +332,12 @@ public class QuizGameGUI extends JFrame {
         loadQuestion();
     }
 
+    /**
+     * Collects the answer entered or selected by the player.
+     *
+     * @return the selected option letter, typed answer, or {@code null}
+     * if no answer was provided
+     */
     private String collectAnswer() {
         if (blankField != null) {
             return blankField.getText();
@@ -325,6 +348,9 @@ public class QuizGameGUI extends JFrame {
         return null;
     }
 
+    /**
+     * Shows the final score dialog and closes the quiz window.
+     */
     private void showFinalResult() {
         JOptionPane.showMessageDialog(
                 this,
@@ -335,6 +361,12 @@ public class QuizGameGUI extends JFrame {
         dispose();
     }
 
+    /**
+     * Launches the quiz game GUI if the environment supports graphics.
+     *
+     * @return {@code true} if GUI launch was attempted; {@code false}
+     * if the environment is headless
+     */
     public static boolean launch() {
         if (GraphicsEnvironment.isHeadless()) {
             return false;
@@ -353,12 +385,24 @@ public class QuizGameGUI extends JFrame {
         return true;
     }
 
+    /**
+     * Creates a panel with the standard surface background color.
+     *
+     * @param layout the layout manager for the panel
+     * @return the styled surface panel
+     */
     private JPanel createSurfacePanel(BorderLayout layout) {
         JPanel panel = new JPanel(layout);
         panel.setBackground(PANEL_COLOR);
         return panel;
     }
 
+    /**
+     * Creates a styled form label.
+     *
+     * @param text the label text
+     * @return the styled label
+     */
     private JLabel createFieldLabel(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(TEXT_COLOR);
@@ -366,6 +410,11 @@ public class QuizGameGUI extends JFrame {
         return label;
     }
 
+    /**
+     * Applies standard styling to a text field.
+     *
+     * @param field the text field to style
+     */
     private void styleTextField(JTextField field) {
         field.setFont(new Font("SansSerif", Font.PLAIN, 16));
         field.setForeground(TEXT_COLOR);
@@ -375,6 +424,13 @@ public class QuizGameGUI extends JFrame {
                 new EmptyBorder(8, 10, 8, 10)));
     }
 
+    /**
+     * Applies standard styling to a button.
+     *
+     * @param button the button to style
+     * @param background the button background color
+     * @param foreground the button text color
+     */
     private void styleButton(JButton button, Color background, Color foreground) {
         button.setBackground(background);
         button.setForeground(foreground);
@@ -387,15 +443,29 @@ public class QuizGameGUI extends JFrame {
         button.setMargin(new Insets(10, 18, 10, 18));
     }
 
+    /**
+     * Custom rounded button with a colored background.
+     */
     private static class ColorButton extends JButton {
         private final Color backgroundColor;
-
+        /**
+         * Creates a rounded color button.
+         *
+         * @param text the button text
+         * @param backgroundColor the button background color
+         * @param foregroundColor the button text color
+         */
         ColorButton(String text, Color backgroundColor, Color foregroundColor) {
             super(text);
             this.backgroundColor = backgroundColor;
             setForeground(foregroundColor);
         }
 
+        /**
+         * Paints the rounded button background.
+         *
+         * @param graphics the graphics context
+         */
         @Override
         protected void paintComponent(Graphics graphics) {
             Graphics2D graphics2D = (Graphics2D) graphics.create();
@@ -407,11 +477,23 @@ public class QuizGameGUI extends JFrame {
         }
     }
 
+    /**
+     * Custom panel that paints a gradient background.
+     */
     private static class GradientPanel extends JPanel {
+        /**
+         * Creates a gradient panel using the given card layout.
+         *
+         * @param layout the card layout used by the panel
+         */
         GradientPanel(CardLayout layout) {
             super(layout);
         }
-
+        /**
+         * Paints the gradient background.
+         *
+         * @param graphics the graphics context
+         */
         @Override
         protected void paintComponent(Graphics graphics) {
             Graphics2D graphics2D = (Graphics2D) graphics.create();
@@ -425,6 +507,11 @@ public class QuizGameGUI extends JFrame {
             super.paintComponent(graphics);
         }
 
+        /**
+         * Indicates that this panel handles its own background painting.
+         *
+         * @return {@code false} because the panel is not fully opaque
+         */
         @Override
         public boolean isOpaque() {
             return false;

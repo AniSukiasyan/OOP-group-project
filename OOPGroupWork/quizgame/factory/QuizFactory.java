@@ -1,17 +1,17 @@
-package OOPGroupProject.OOPGroupWork.quizgame.factory;
-
+package OOPGroupWork.quizgame.factory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import OOPGroupProject.OOPGroupWork.quizgame.model.DifficultyLevel;
-import OOPGroupProject.OOPGroupWork.quizgame.model.Quiz;
-import OOPGroupProject.OOPGroupWork.quizgame.questions.CodeCompletionQuestion;
-import OOPGroupProject.OOPGroupWork.quizgame.questions.FillInBlankQuestion;
-import OOPGroupProject.OOPGroupWork.quizgame.questions.MultipleChoiceQuestion;
-import OOPGroupProject.OOPGroupWork.quizgame.questions.Question;
-import OOPGroupProject.OOPGroupWork.quizgame.questions.TrueFalseQuestion;
+import OOPGroupWork.quizgame.model.DifficultyLevel;
+
+import OOPGroupWork.quizgame.model.Quiz;
+import OOPGroupWork.quizgame.questions.CodeCompletionQuestion;
+import OOPGroupWork.quizgame.questions.FillInBlankQuestion;
+import OOPGroupWork.quizgame.questions.MultipleChoiceQuestion;
+import OOPGroupWork.quizgame.questions.Question;
+import OOPGroupWork.quizgame.questions.TrueFalseQuestion;
 
 public class QuizFactory {
     private final Random random = new Random();
