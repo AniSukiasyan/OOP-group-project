@@ -92,6 +92,6 @@ Link: https://chatgpt.com/share/6a070e70-94d0-838a-a366-9e51dc23953a
 
 ## Authors
 
-- Project developed by the OOP Group Project team.
+- Project developed by Gayane Sahakyan, Maria Nadarina and Ani Sukiasyan.
 
 
