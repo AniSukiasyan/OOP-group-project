@@ -1,4 +1,3 @@
-// AnswerUtils.java
 package OOPGroupWork.quizgame.util;
 
 import java.util.ArrayList;
